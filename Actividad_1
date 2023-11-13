@@ -1,0 +1,92 @@
+struct Articulo {   // Se comienza con la estructura de 2 valores para la aplicacion
+    var nombre: String   // se declara la variable de tipo String
+    var precio: Double   // se declara la variable de tipo Double
+    var stock: Int       // se declara la variable de tipo entero
+}
+
+func lineasDobles(){  // se crea la funcion lineas
+  print("\n===========================================")
+}
+
+func lineas(){  // se crea la funcion lineas
+  print("\n-------------------------------------------")
+}
+
+class Inventario {       // se crea la clase inventario
+    var articulos: [Articulo]     // se creala variable para el arreglo de los articulos
+
+    init() {
+        // Inicializamos el inventario con algunos artículos
+        self.articulos = [
+            Articulo(nombre: "Zapatos", precio: 500.0, stock: 5),
+            Articulo(nombre: "Playeras", precio: 400.0, stock: 8),
+            Articulo(nombre: "Pantalones", precio: 380.0, stock: 3),
+            Articulo(nombre: "Sombrero", precio: 150.0, stock: 10),
+            Articulo(nombre: "Calcetines", precio: 75.0, stock: 7)
+        ]
+    }
+
+    func mostrarMenu() {      // se crea la funcion para el menu de la aplicacion
+      lineasDobles()  // se llama la funcion de lineas
+        print("\n    Bienvenido a la Boutique Norma")  // se muestra el menu
+        print("\n        Tu tienda online !")
+      lineasDobles()  // se llama la funcion de lineas
+
+        print("\n     *** Menu de artuculos ***")   //Se muestra el menu de articulos mediante ciclo for
+        for (index, articulo) in articulos.enumerated()
+      {        
+            print("\n\(index + 1). \(articulo.nombre) \n   Precio: \(articulo.precio) \n   Stock: \(articulo.stock)")
+        lineas()   //Se muestra en pantalla los articulos con el precio y el stock
+      }
+        print("\nDigite 0 si desea Salir")  
+        lineasDobles()   // se llama la funcion de lineas
+    }
+
+    func realizarCompra() {    // se crea la funcion para realizar la compra
+        print("\nIngrese el número del artículo que desea comprar (0 para salir):") //se solicita capturar el num. del articulo
+
+        if let opcion = readLine(), let indice = Int(opcion), indice >= 0 && indice <= articulos.count {
+            if indice == 0 {
+                print("¡Gracias por su compra!")
+                return
+            }
+
+          if indice >= 6     //se limita al numero total de articulos0      
+          {
+            print("\nOpcion no valida, capture un num. del 1 al 5")
+          }
+
+            let articuloSeleccionado = articulos[indice - 1]
+
+            guard articuloSeleccionado.stock > 0 else {     //Se verifica el inventario
+                print("¡Lo siento! El artículo seleccionado está agotado.")
+                return
+            }
+            // se solicita a usuario la cantidad del articulo seleccionado
+            print("Ingrese la cantidad que desea comprar (Stock disponible: \(articuloSeleccionado.stock)):")
+
+            if let cantidadString = readLine(), let cantidad = Int(cantidadString), cantidad > 0 && cantidad <= articuloSeleccionado.stock {
+                let precioTotal = Double(cantidad) * articuloSeleccionado.precio   // se multiplica el precio del articulo por la cantidad de piezas compradas
+
+                print("\nCompra realizada:")
+                print("Artículo: \(articuloSeleccionado.nombre)")   // se muestra el articulo comprado
+                print("Cantidad: \(cantidad)")                      // se muestra la cantidad camprada
+                print("Precio Total a Pagar: \(precioTotal)")       // se muestra el precio total
+                
+                articulos[indice - 1].stock -= cantidad   // Actualizar el inventario
+            } else {
+                print("Cantidad inválida.")
+            }
+        } else {
+            print("Opción inválida.")
+        }
+    }
+}
+
+// Programa Principal
+let inventario = Inventario()
+
+while true {   // De esta forma siempre sale el menu
+    inventario.mostrarMenu()
+    inventario.realizarCompra()
+}
