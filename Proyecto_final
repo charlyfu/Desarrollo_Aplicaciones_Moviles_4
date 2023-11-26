@@ -1,0 +1,85 @@
+var saldo: Double = 1000.0 // Se crea una variable de tipo Double con saldo
+
+func lineasDobles(){  // se crea la funcion lineas dobles
+  print("\n===========================================")
+}
+
+func lineas(){  // se crea la funcion lineas
+  print("\n-------------------------------------------")
+}
+
+func mostrarMenu() {    // se crea la funcion del menu de la aplicacion
+    lineasDobles()   // se llama la funcion de lineas
+    print("\n    ***** Menú de Banca en Línea *****")
+    print("\n1. Depósito")
+    print("2. Retiro")
+    print("3. Saldo")
+    print("4. Salir")
+    lineasDobles()        // se llama la funcion de lineas
+    print("\nPor favor, seleccione una opción:")//se solicita capturar una opcion
+}
+
+func realizarDeposito() {  // se crea la funcion para realizar el deposito
+    print("Ingrese la cantidad a depositar:")
+    guard let montoDeposito = readLine(), let cantidad = Double(montoDeposito)// se guarda la cantidad capturada en la variable
+        else {   
+        print("Entrada inválida. Inténtelo de nuevo.") // Si no se digita un numero envia este mensaje
+        return
+    }
+    saldo += cantidad   // Se suma el deposito al saldo disponible
+    print("\nDepósito exitoso. Nuevo saldo: \(saldo)")  // Muestra mensaje con saldo nuevo
+    // Preguntar si desea realizar otro depósito
+        print("¿Desea realizar otro depósito? (Sí/No)")  // se muestra en pantalla esta pregunta
+        if let respuesta = readLine(), respuesta.lowercased() == "si" { //si la respuesta es igual a si
+            realizarDeposito()                                  //llama la funcion realizarDeposito y la ejecuta
+        }          //si se responde que no, manda a llamar la funcion mostrarMenu debido al bucle while
+}
+
+func realizarRetiro() {   // se crea la funcion para realizar el retiro
+    print("Ingrese la cantidad a retirar:")
+    guard let montoRetiro = readLine(), let cantidad = Double(montoRetiro) else {  //Guarda la opcion capturada y valida que sea un numero
+        print("Entrada inválida. Inténtelo de nuevo.") //si no es numero muestra este mensaje
+        return  //regresa al menu
+    }
+    if cantidad > saldo { //si la cantidad a retirar es mayor al saldo
+        print("Fondos insuficientes.")  // muestra el siguiente mensaje
+    } else { // y si no
+        saldo -= cantidad  // resta la cantidad capturada al saldo
+        print("Retiro exitoso. Nuevo saldo: \(saldo)")  //muestra el saldo nuevo
+    }
+}
+
+func mostrarSaldo() {   // se crea la funcion para mostrar el saldo
+    print("Su saldo actual es: \(saldo)")  //se imprime en pantalla el saldo actual
+
+    print("¿Desea realizar otra operacion? (Sí/No)")  // se muestra en pantalla esta pregunta
+    if let respuesta = readLine(), respuesta.lowercased() == "no" { //si la respuesta es igual a no
+        print("Cerrando Sesion de cuenta, vuelva pronto....")  //muestra en pantalla este mensaje
+    }          //si se responde que si, manda a llamar la funcion mostrarMenu debido al bucle while
+}
+//----------------------------------------------------------------------------------------------------
+// Codigo principal del programa
+var continuar = true  // Se crea la variable continuar como verdadera
+
+while continuar {  // se utiliza Bucle while para que sea repetitivo al terminar una transaccion
+    mostrarMenu()  // llama la funcion menu y lo muestra en pantalla
+
+    guard let opcion = readLine(), let seleccion = Int(opcion) else {  //Guarda la opcion capturada y valida con la opcion del menu
+        print("Opción inválida. Inténtelo de nuevo.") // si no es un numero entero, muestra este mensaje
+        continue // si es entero, continua la aplicacion
+    }
+
+    switch seleccion {  // se crea un switch para para asignar cada una de las opciones del menu
+    case 1:  //si se digita el 1
+        realizarDeposito()  //Llama la funcion deposito y se ejecuta
+    case 2:  //si se digita el 2
+        realizarRetiro()   //Llama la funcion retiro y se ejecuta
+    case 3:  //si se digita el 3
+        mostrarSaldo()   //Llama la funcion saldo y se ejecuta
+    case 4:  //si se digita el 4
+        continuar = false    //Salimos de la aplicacion
+        print("Gracias por utilizar nuestro servicio de banca en línea. ¡Hasta Pronto!") // muestra este mensaje al salir de la aplicacion
+    default:   // en caso de oprimir un nuemro diferente del 1 al 4 imprime en pantalla el siguiente mensaje
+        print("Opción no válida. Por favor, seleccione una opción del menú.")
+    }
+}
